@@ -44,6 +44,18 @@ const check = (name, cond) => {
   check('manifest start_url resolves to app root', manifest && (manifest.start_url === './' || manifest.start_url === '/'))
 
   console.log('PWA TEST 3 - cache storage populated')
+  // Wait until any in-flight SW update settles (live site may update mid-test)
+  await page.evaluate(async () => {
+    const reg = await navigator.serviceWorker.getRegistration()
+    if (reg) {
+      await new Promise(resolve => {
+        if (!reg.installing && !reg.waiting) return resolve()
+        const check = () => (!reg.installing && !reg.waiting) ? resolve() : setTimeout(check, 300)
+        check()
+      })
+      await new Promise(r => setTimeout(r, 400))
+    }
+  })
   const cacheInfo = await page.evaluate(async () => {
     const names = await caches.keys()
     const unique = new Set()
