@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3a7d3a"/>
+    </marker>
+  </defs>
+  <rect width="960" height="540" fill="#f5f9f5"/>
+  <text x="480" y="48" text-anchor="middle" font-size="26" font-weight="700" fill="#1e3a1e">NatureFit — Touch Grass Workflow</text>
+  <text x="480" y="74" text-anchor="middle" font-size="14" fill="#4a6a4a">One task = a nature discovery + a movement. XP only for real completions.</text>
+
+  <!-- Row 1 -->
+  <g>
+    <rect x="40" y="110" width="180" height="90" rx="14" fill="#ffffff" stroke="#3a7d3a" stroke-width="2"/>
+    <text x="130" y="145" text-anchor="middle" font-size="24">🌿</text>
+    <text x="130" y="172" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">1. Landing</text>
+    <text x="130" y="188" text-anchor="middle" font-size="11" fill="#4a6a4a">Your surroundings are your gym</text>
+
+    <line x1="220" y1="155" x2="270" y2="155" stroke="#3a7d3a" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="270" y="110" width="180" height="90" rx="14" fill="#ffffff" stroke="#3a7d3a" stroke-width="2"/>
+    <text x="360" y="145" text-anchor="middle" font-size="24">🎯</text>
+    <text x="360" y="172" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">2. Create quest</text>
+    <text x="360" y="188" text-anchor="middle" font-size="11" fill="#4a6a4a">activity · time · level · place</text>
+
+    <line x1="450" y1="155" x2="500" y2="155" stroke="#3a7d3a" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="500" y="110" width="200" height="90" rx="14" fill="#e8f3e8" stroke="#3a7d3a" stroke-width="2.5"/>
+    <text x="600" y="145" text-anchor="middle" font-size="24">🤖</text>
+    <text x="600" y="172" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">3. AI quest design</text>
+    <text x="600" y="188" text-anchor="middle" font-size="11" fill="#4a6a4a">open-weight model + validation</text>
+
+    <line x1="700" y1="155" x2="750" y2="155" stroke="#3a7d3a" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="750" y="110" width="170" height="90" rx="14" fill="#ffffff" stroke="#3a7d3a" stroke-width="2"/>
+    <text x="835" y="145" text-anchor="middle" font-size="24">📋</text>
+    <text x="835" y="172" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">4. Briefing</text>
+    <text x="835" y="188" text-anchor="middle" font-size="11" fill="#4a6a4a">integrated checkpoints</text>
+  </g>
+
+  <!-- Row 2 (right to left) -->
+  <g>
+    <rect x="750" y="250" width="170" height="90" rx="14" fill="#ffffff" stroke="#3a7d3a" stroke-width="2"/>
+    <text x="835" y="285" text-anchor="middle" font-size="24">🏃</text>
+    <text x="835" y="312" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">5. Active task</text>
+    <text x="835" y="328" text-anchor="middle" font-size="11" fill="#4a6a4a">nature + movement, gated</text>
+
+    <line x1="750" y1="295" x2="700" y2="295" stroke="#3a7d3a" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="500" y="250" width="200" height="90" rx="14" fill="#ffffff" stroke="#3a7d3a" stroke-width="2"/>
+    <text x="600" y="285" text-anchor="middle" font-size="24">📸</text>
+    <text x="600" y="312" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">6. Photo evidence</text>
+    <text x="600" y="328" text-anchor="middle" font-size="11" fill="#4a6a4a">unlocks completion → +20 XP</text>
+
+    <line x1="500" y1="295" x2="450" y2="295" stroke="#3a7d3a" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="270" y="250" width="180" height="90" rx="14" fill="#fff8e8" stroke="#d9a441" stroke-width="2.5"/>
+    <text x="360" y="285" text-anchor="middle" font-size="24">📵</text>
+    <text x="360" y="312" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">7. Phone away</text>
+    <text x="360" y="328" text-anchor="middle" font-size="11" fill="#4a6a4a">the rest happens out there</text>
+
+    <line x1="270" y1="295" x2="220" y2="295" stroke="#3a7d3a" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="40" y="250" width="180" height="90" rx="14" fill="#ffffff" stroke="#3a7d3a" stroke-width="2"/>
+    <text x="130" y="285" text-anchor="middle" font-size="24">✅</text>
+    <text x="130" y="312" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">8. All tasks</text>
+    <text x="130" y="328" text-anchor="middle" font-size="11" fill="#4a6a4a">quest bonus +20 XP</text>
+  </g>
+
+  <!-- Row 3 -->
+  <g>
+    <rect x="40" y="390" width="180" height="90" rx="14" fill="#ffffff" stroke="#3a7d3a" stroke-width="2"/>
+    <text x="130" y="425" text-anchor="middle" font-size="24">🎉</text>
+    <text x="130" y="452" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">9. Results</text>
+    <text x="130" y="468" text-anchor="middle" font-size="11" fill="#4a6a4a">XP · discoveries · streak</text>
+
+    <line x1="220" y1="435" x2="270" y2="435" stroke="#3a7d3a" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="270" y="390" width="180" height="90" rx="14" fill="#ffffff" stroke="#3a7d3a" stroke-width="2"/>
+    <text x="360" y="425" text-anchor="middle" font-size="24">📖</text>
+    <text x="360" y="452" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">10. Journal</text>
+    <text x="360" y="468" text-anchor="middle" font-size="11" fill="#4a6a4a">progress · history · CTA</text>
+
+    <line x1="450" y1="435" x2="500" y2="435" stroke="#3a7d3a" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="500" y="390" width="200" height="90" rx="14" fill="#e8f3e8" stroke="#3a7d3a" stroke-width="2.5"/>
+    <text x="600" y="425" text-anchor="middle" font-size="24">↩️</text>
+    <text x="600" y="452" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">11. Another quest</text>
+    <text x="600" y="468" text-anchor="middle" font-size="11" fill="#4a6a4a">Journal CTA → Create</text>
+
+    <!-- PWA note -->
+    <rect x="750" y="390" width="170" height="90" rx="14" fill="#ffffff" stroke="#3a7d3a" stroke-dasharray="5 4" stroke-width="2"/>
+    <text x="835" y="425" text-anchor="middle" font-size="24">📱</text>
+    <text x="835" y="452" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a1e">PWA (optional)</text>
+    <text x="835" y="468" text-anchor="middle" font-size="11" fill="#4a6a4a">installable · offline shell</text>
+  </g>
+</svg>

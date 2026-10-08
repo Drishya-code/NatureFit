@@ -11,6 +11,8 @@ The screen gives you a mission. The real activity happens outside.
 
 ## 📸 The NatureFit Workflow
 
+![NatureFit workflow](docs/workflow.svg)
+
 | # | Screen | What happens |
 |---|--------|--------------|
 | 1 | [Landing](docs/screenshots/01-landing.png) | Your surroundings are your gym |
