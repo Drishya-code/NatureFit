@@ -1,10 +1,7 @@
 //==================== TESTABLE AI LAYER ====================
-// Extracted VERBATIM from src/App.jsx by tests/extract-ai-layer.py
-// (re-run that script after editing the AI layer in App.jsx)
-// Do not hand-edit.
+// Extracted VERBATIM from src/App.jsx. Do not hand-edit.
 
 "use strict"
-
 
 const makeTaskId = (i) => `task-${i + 1}-${Math.random().toString(36).slice(2, 7)}`
 
@@ -18,14 +15,14 @@ const guessNatureType = (text) => {
 }
 
 const UNSAFE_PATTERNS = [
-    'pick a living', 'pick a flower', 'pick living', 'pick the leaf',
-    'break a branch', 'break branch', 'damage a tree', 'damage the tree',
-    'disturb a nest', 'disturb nest', 'capture a bird', 'capture bird',
-    'touch wildlife', 'touch the wildlife', 'destroy a plant', 'destroy plant',
-    'pluck a', 'pluck the', 'remove a', 'remove the', 'take a', 'take the',
-    'collect a living', 'collect living', 'harvest a', 'harvest the',
-    'pull up', 'pull out', 'dig up', 'cut a', 'cut the', 'chop a', 'chop the'
-  ]
+  'pick a living', 'pick a flower', 'pick living', 'pick the leaf',
+  'break a branch', 'break branch', 'damage a tree', 'damage the tree',
+  'disturb a nest', 'disturb nest', 'capture a bird', 'capture bird',
+  'touch wildlife', 'touch the wildlife', 'destroy a plant', 'destroy plant',
+  'pluck a', 'pluck the', 'remove a', 'remove the', 'take a', 'take the',
+  'collect a living', 'collect living', 'harvest a', 'harvest the',
+  'pull up', 'pull out', 'dig up', 'cut a', 'cut the', 'chop a', 'chop the'
+]
 
 const parseAIQuestJSON = (content, params) => {
 let text = String(content || '').trim()
@@ -70,30 +67,30 @@ return {
 }
 
 const validateQuestStructure = (quest) => {
-    if (!quest || typeof quest !== 'object') return false
-    if (!quest.title || !String(quest.title).trim()) return false
-    if (!quest.description || !String(quest.description).trim()) return false
-    if (typeof quest.duration !== 'number' || quest.duration <= 0) return false
-    if (!Array.isArray(quest.tasks) || quest.tasks.length < 2) return false
+  if (!quest || typeof quest !== 'object') return false
+  if (!quest.title || !String(quest.title).trim()) return false
+  if (!quest.description || !String(quest.description).trim()) return false
+  if (typeof quest.duration !== 'number' || quest.duration <= 0) return false
+  if (!Array.isArray(quest.tasks) || quest.tasks.length < 2) return false
 
-    const allowedEvidence = new Set(['photo', 'self'])
-    const allowedNatureType = new Set(['tree', 'leaf', 'flower', 'bird', 'other'])
+  const allowedEvidence = new Set(['photo', 'self'])
+  const allowedNatureType = new Set(['tree', 'leaf', 'flower', 'bird', 'other'])
 
-    for (const task of quest.tasks) {
-      if (!task.title || !String(task.title).trim()) return false
-      if (!task.natureAction || !String(task.natureAction).trim()) return false
-      if (!task.fitnessAction || !String(task.fitnessAction).trim()) return false
-      if (!allowedEvidence.has(task.evidence)) return false
-      if (!allowedNatureType.has(task.natureType)) return false
-      if (typeof task.xp !== 'number' || task.xp < 10 || task.xp > 50) return false
-    }
-    return true
+  for (const task of quest.tasks) {
+    if (!task.title || !String(task.title).trim()) return false
+    if (!task.natureAction || !String(task.natureAction).trim()) return false
+    if (!task.fitnessAction || !String(task.fitnessAction).trim()) return false
+    if (!allowedEvidence.has(task.evidence)) return false
+    if (!allowedNatureType.has(task.natureType)) return false
+    if (typeof task.xp !== 'number' || task.xp < 10 || task.xp > 50) return false
   }
+  return true
+}
 
 const hasUnsafeContent = (quest) => {
-    const text = `${quest.title} ${quest.description} ${quest.tasks.map(t => t.natureAction + ' ' + t.fitnessAction).join(' ')}`.toLowerCase()
-    return UNSAFE_PATTERNS.some(p => text.includes(p))
-  }
+  const text = `${quest.title} ${quest.description} ${quest.tasks.map(t => t.natureAction + ' ' + t.fitnessAction).join(' ')}`.toLowerCase()
+  return UNSAFE_PATTERNS.some(p => text.includes(p))
+}
 
 module.exports = {
   UNSAFE_PATTERNS,

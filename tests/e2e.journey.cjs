@@ -243,6 +243,45 @@ async function advanceAfterFlash(page) {
   check('back on active task after tap', true)
   check('timer did not reset (kept running while away)', !metaAfter.includes('0:00'))
 
+  // ================= SUITE D: double-tap bonus guard =================
+  console.log('E2E - D: double-tap "Complete quest" awards bonus exactly once')
+  await gotoFreshUser(page)
+  await createQuest(page)
+  await startQuest(page)
+  for (let i = 1; i <= 4; i++) {
+    const input = page.locator('input[type="file"]')
+    if ((await input.count()) > 0) {
+      await input.setInputFiles({ name: `d${i}.png`, mimeType: 'image/png', buffer: realPng })
+      await page.waitForTimeout(900)
+    }
+    for (const label of ['I did the movement', 'Skip timer']) {
+      const mb = page.locator(`button:has-text("${label}")`)
+      if (await mb.count()) { await mb.click(); await page.waitForTimeout(200) }
+    }
+    const btn = page.locator('button:has-text("Complete task")')
+    await page.waitForFunction(() => {
+      const b = [...document.querySelectorAll('button')].find(x => x.textContent.includes('Complete task'))
+      return b && !b.disabled
+    }, { timeout: 8000 })
+    await btn.click()
+    await page.waitForTimeout(400)
+    const next = page.getByText('Next mission')
+    const see = page.getByText('See the results')
+    if (await next.count()) { await next.click(); await page.waitForTimeout(300) }
+    else if (await see.count()) { await see.click(); await page.waitForTimeout(300) }
+  }
+  await expectText(page, 'All tasks complete')
+  const preBonus = await xp(page)
+  check('fresh 4-task quest at 80 XP pre-bonus', preBonus === 80)
+  await page.evaluate(() => {
+    const b = [...document.querySelectorAll('button')].find(x => x.textContent.includes('Complete quest'))
+    b.click(); b.click()   // synchronous double-tap
+  })
+  await expectText(page, 'Quest complete')
+  check('double-tap awards exactly +20 bonus (XP 100, not 120)', (await xp(page)) === 100)
+  const entries = await page.evaluate(() => JSON.parse(localStorage.getItem('naturefit_quest_history_v2') || '[]').length)
+  check('double-tap archives exactly one history entry', entries === 1)
+
   console.log('E2E - console errors')
   check('zero page errors through whole journey', consoleErrors.length === 0)
   if (consoleErrors.length) console.log(consoleErrors)

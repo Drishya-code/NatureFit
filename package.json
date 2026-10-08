@@ -7,13 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
+    "test": "node tests/logic.test.mjs && node tests/ai.test.cjs && node tests/e2e.journey.cjs && node tests/pwa.test.cjs && node tests/a11y.test.cjs && node tests/edges.test.cjs",
     "preview": "vite preview"
   },
   "dependencies": {
-    "canvas": "^3.2.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "sharp": "^0.35.5",
     "vite-plugin-pwa": "^2.0.0"
   },
   "devDependencies": {

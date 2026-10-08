@@ -929,3 +929,13 @@ img { max-width: 100%; display: block; }
 .btn-link:hover {
   text-decoration: underline;
 }
+
+.offline-note {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-align: center;
+}

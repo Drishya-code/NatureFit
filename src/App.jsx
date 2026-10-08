@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // ============================================================
 // NatureFit — outdoor adventure game
@@ -575,6 +575,8 @@ function App() {
   const [updateReady, setUpdateReady] = useState(false)
 
   // Wipe the old broken prototype data once, then restore any in-progress quest.
+  // One-time hydration from LocalStorage (external system) on mount.
+  /* eslint-disable react/set-state-in-effect */
   useEffect(() => {
     migrateLegacyData()
     const saved = getStorage(STORAGE.CURRENT_QUEST, null)
@@ -587,6 +589,7 @@ function App() {
       setScreen(q.timer ? SCREENS.ACTIVE : SCREENS.BRIEFING)
     }
   }, [])
+  /* eslint-enable react/set-state-in-effect */
 
   // Service worker update flow: never force-refresh mid-quest.
   useEffect(() => {
@@ -594,6 +597,8 @@ function App() {
     window.addEventListener('naturefit-update-ready', onUpdateReady)
     return () => window.removeEventListener('naturefit-update-ready', onUpdateReady)
   }, [])
+
+  const finishingRef = useRef(false)
 
   const persistQuest = (q) => {
     setQuest(q)
@@ -627,9 +632,14 @@ function App() {
   }
 
   // Award bonus, archive the quest, record honest outdoor time, clear state.
+  // Guard: once archived, the CURRENT_QUEST storage key is null — calling
+  // finishQuest again (double-tap) finds no archived quest and no-ops, so the
+  // bonus and the history entry can only ever be written once.
   const finishQuest = () => {
     const q = quest
     if (!q || q.tasks.some(t => !t.completed)) return
+    if (finishingRef.current) return // double-tap guard: bonus is one-shot
+    finishingRef.current = true
 
     const elapsedMs = timerElapsedMs(q.timer)
     const taskXP = q.tasks.reduce((sum, t) => sum + t.xp, 0)
@@ -931,6 +941,12 @@ function CreateQuest({ onGenerate, generating, error, onOffline, onBack, isOnlin
           </div>
         </section>
 
+        {!isOnline && (
+          <p className="offline-note" role="status">
+            ○ You're offline — your quest will come from the ready-made library.
+          </p>
+        )}
+
         {error && (
           <div className="error-box" role="alert">
             <p><strong>We couldn’t create your quest.</strong></p>
@@ -1021,9 +1037,11 @@ function ActiveQuest({ quest, onUpdate, onFinish, onAbandon }) {
   }, [])
 
   // reset the movement timer whenever the current task changes
+  /* eslint-disable react/set-state-in-effect */
   useEffect(() => {
     if (moveTimer && moveTimer.taskId !== currentTask?.id) setMoveTimer(null)
   }, [currentTask?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+  /* eslint-enable react/set-state-in-effect */
 
   // movement countdown
   useEffect(() => {
@@ -1319,12 +1337,22 @@ function Results({ result, onNewQuest, onJournal }) {
 
 // ==================== JOURNAL (progress) ====================
 
+const greetingForNow = () => {
+  const h = new Date().getHours()
+  if (h < 5) return 'Good night 🌙'
+  if (h < 12) return 'Good morning 🌿'
+  if (h < 17) return 'Good afternoon ☀️'
+  return 'Good evening 🌆'
+}
+
 function Journal({ quest, onNewQuest, onContinue, onBack }) {
   const history = getStorage(STORAGE.QUEST_HISTORY, [])
   const discoveries = getStorage(STORAGE.DISCOVERIES, [])
   const outdoorXP = getOutdoorXP()
   const streak = getStorage(STORAGE.STREAK, 0)
 
+  // Reading the clock once per render for "this week" boundaries is intentional.
+  // eslint-disable-next-line react-hooks/purity
   const weekAgo = Date.now() - 7 * 86400000
   const week = history.filter(q => new Date(q.date).getTime() >= weekAgo)
   const weekMinutes = week.reduce((s, q) => s + q.elapsedMinutes, 0)
@@ -1338,7 +1366,6 @@ function Journal({ quest, onNewQuest, onContinue, onBack }) {
   discoveries.forEach(d => { discoveryCounts[d.type] = (discoveryCounts[d.type] || 0) + 1 })
 
   const questReadyToFinish = quest && quest.tasks && quest.tasks.every(t => t.completed)
-  const questInProgress = quest && quest.tasks && !questReadyToFinish
   const activeProgress = quest ? quest.tasks.filter(t => t.completed).length : 0
   const activeTotal = quest ? quest.tasks.length : 0
 
@@ -1348,7 +1375,7 @@ function Journal({ quest, onNewQuest, onContinue, onBack }) {
 
       <div className="journal-inner">
         <header className="journal-header">
-          <p className="kicker">Good morning 🌿</p>
+          <p className="kicker">{greetingForNow()}</p>
           <h2>Your outdoor journey</h2>
         </header>
 
@@ -1441,9 +1468,6 @@ function Journal({ quest, onNewQuest, onContinue, onBack }) {
                   )}
                 </section>
 
-                {questInProgress && (
-                  <button className="btn btn-primary btn-full" onClick={onContinue}>Continue today's quest →</button>
-                )}
       </div>
     </div>
   )

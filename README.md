@@ -58,6 +58,11 @@ Example quest — Tree Circuit:
     🏃 Then: 90 sec brisk walk                      +20 Outdoor XP
 ```
 
+## Tech stack
+
+React 19 · Vite 8 · plain CSS · LocalStorage · vite-plugin-pwa (Workbox) ·
+Playwright + Node test harness. **No backend, no database, no auth, no telemetry.**
+
 ## Architecture
 
 ```
@@ -162,30 +167,51 @@ listening and fallen natural objects.
 ## Run it
 
 ```bash
-cd naturefit
 npm install
-npm run dev        # http://localhost:5173
-npm run build      # production build
+npm run dev        # dev server → http://localhost:5173
+npm run build      # production build → dist/
+npm test           # all 6 suites (builds first, serves dist on :4590)
+npm run lint       # oxlint
 ```
 
-## Testing performed
+Optional AI: copy `.env.example` → `.env.local`, fill in an OpenAI-compatible
+endpoint + key. Without it, the app runs on the offline fallback library.
 
-- New user (cleared storage): Outdoor XP 0, streak 0, no fake history.
-- Generate + start quest: still 0 XP.
-- Task completion gated on evidence: photo task cannot complete without a photo.
-- Completing a task: +XP once; re-opening does not re-award.
-- Refresh mid-quest: task completion, XP and timer survive (LocalStorage).
-- Quest can only be finished when all tasks are complete (no empty submissions).
-- Quest bonus added exactly once.
-- Second quest: previous XP persists, new quest starts at 0 earned.
-- Journal shows only real history; empty states before first quest.
-- Mobile viewport (375px), keyboard focus states, aria labels, reduced motion.
+## Testing
 
-## Limitations / future work
+```bash
+npm test        # 6 suites, 153 automated checks (Playwright + Node)
+```
 
-- No GPS/step tracking — distance is never fabricated, so it isn't shown.
-- Photo verification is presence-only (by design for MVP).
-- Optional future: AI photo descriptions, weather awareness, PWA install.
+All suites run against the production build (`vite build` first):
+
+| Suite | Checks | What it covers |
+|-------|--------|----------------|
+| Logic (Node) | 24 | XP rules, streak math, persistence, fallback library, banned-phrase scan |
+| AI path (mock endpoint) | 39 | valid AI JSON → quest; malformed/gibberish/truncated rejected; structure validation; 33 unsafe-phrase patterns flagged, safe quests pass |
+| E2E journey (Playwright) | 40 | full user flow incl. evidence gating, refresh persistence, honest XP math (0/20/80/100), Journal CTA, phone-away timer, double-tap bonus guard |
+| PWA | 20 | manifest, SW registration, cache storage, offline app shell, offline fallback quest end-to-end, back-online |
+| Accessibility | 17 | keyboard navigation, focus visibility, aria labels/groups, alt text, pause/resume timer, reduced-motion, contrast (13.7:1) |
+| Edge cases | 13 | 20 activity×duration combos, photo never leaks across tasks, timer skip, empty journal, streak date math |
+
+Manually verified in addition: live GitHub Pages deployment (offline journey
+works on the real HTTPS URL), 4 viewports (375/390/768/1440), zero console
+errors across every suite.
+
+## Limitations (honest)
+
+- **No GPS/step tracking.** Distance is never fabricated — so it is never shown.
+- **Photo verification is presence-only.** The app checks that a photo exists;
+  it does not (and does not claim to) verify what is in the photo.
+- **Movement is self-reported.** The UI says so explicitly.
+- **Progress is device-local** (LocalStorage). No accounts, no sync between devices.
+- **AI quests need connectivity.** Offline quests come from the built-in fallback
+  library and are labeled "Offline quest" — never presented as AI-generated.
+
+### Future work
+- AI photo descriptions for logged discoveries
+- Optional GPS distance tracking (only when the user grants permission)
+- Export/import of local progress
 
 ---
 
