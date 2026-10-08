@@ -2,7 +2,7 @@
 // PWA offline test against the production build
 const { chromium } = require('playwright')
 
-const BASE = 'http://localhost:4590'
+const BASE = 'http://localhost:4590/NatureFit'
 
 const results = []
 const check = (name, cond) => {
@@ -41,24 +41,24 @@ const check = (name, cond) => {
   check('manifest name = NatureFit', manifest && manifest.name === 'NatureFit')
   check('manifest display = standalone', manifest && manifest.display === 'standalone')
   check('manifest has 192 + 512 + maskable icons', manifest && manifest.icons.length >= 3)
-  check('manifest start_url = /', manifest && manifest.start_url === '/')
+  check('manifest start_url resolves to app root', manifest && (manifest.start_url === './' || manifest.start_url === '/'))
 
   console.log('PWA TEST 3 - cache storage populated')
   const cacheInfo = await page.evaluate(async () => {
     const names = await caches.keys()
-    let total = 0
+    const unique = new Set()
     for (const n of names) {
       const c = await caches.open(n)
-      total += (await c.keys()).length
+      for (const req of await c.keys()) unique.add(new URL(req.url).pathname)
     }
-    return { names, total }
+    return { names, total: unique.size }
   })
   check('cache storage exists', cacheInfo.names.length > 0)
-  check('precache has 10+ entries', cacheInfo.total >= 10)
+  check('precache has 8+ unique entries (shell + icons + manifest)', cacheInfo.total >= 8)
 
   console.log('PWA TEST 4 - OFFLINE: app shell still loads')
   await ctx.setOffline(true)
-  await page.goto(BASE)  // this reload must be served by the SW cache
+  await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' })  // must be served by the SW cache
   await page.waitForTimeout(1200)
   const offlineLanding = await page.textContent('body')
   check('app opens while offline (SW cache)', offlineLanding.includes('Your surroundings are your gym.'))
@@ -117,7 +117,7 @@ const check = (name, cond) => {
 
   console.log('PWA TEST 7 - back ONLINE: AI path unaffected')
   await ctx.setOffline(false)
-  await page.goto(BASE)
+  await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' })
   await page.waitForTimeout(800)
   const onlineLanding = await page.textContent('body')
   check('app back online', onlineLanding.includes('Your surroundings are your gym.'))

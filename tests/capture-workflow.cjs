@@ -3,7 +3,7 @@
 const { chromium } = require('playwright')
 const fs = require('fs')
 
-const BASE = 'http://localhost:4590'
+const BASE = 'http://localhost:4590/NatureFit'
 const OUT = 'D:/NatureFit/naturefit/docs/screenshots'
 fs.mkdirSync(OUT, { recursive: true })
 const realPng = fs.readFileSync('D:/NatureFit/naturefit/tests/fixtures/tree-photo.png')

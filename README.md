@@ -1,5 +1,9 @@
 # NatureFit 🌿
 
+> **🌐 Try it live: https://drishya-code.github.io/NatureFit/**
+> *(PWA — installable, works offline once loaded)*
+
+
 **Your surroundings are your gym.**
 
 NatureFit is an outdoor adventure game for the DEV Community Hacktoberfest 2026

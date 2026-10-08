@@ -10,12 +10,11 @@ createRoot(document.getElementById('root')).render(
 )
 
 // PWA service worker registration + gentle update flow.
-// vite-plugin-pwa 'autoUpdate' registers and updates silently; we keep an
-// eye out for a waiting worker and show a non-intrusive banner via postMessage.
+// BASE_URL makes this work both at the domain root and under /NatureFit/.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js')
+      const registration = await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`)
       // Notify the app when a new version is waiting (user refreshes when ready)
       registration.addEventListener('updatefound', () => {
         const installing = registration.installing

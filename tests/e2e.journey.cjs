@@ -14,7 +14,7 @@ const { chromium } = require('playwright')
 const fs = require('fs')
 const path = require('path')
 
-const BASE = 'http://localhost:4590'
+const BASE = 'http://localhost:4590/NatureFit'
 
 // real 640x480 test image (sky gradient + tree silhouette) generated locally
 const realPng = fs.readFileSync(path.join(__dirname, 'fixtures', 'tree-photo.png'))
